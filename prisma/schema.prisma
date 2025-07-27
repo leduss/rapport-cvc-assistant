@@ -1,0 +1,158 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?  // Pour l'authentification
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  projects  Project[]
+  reports   Report[]
+  
+  @@map("users")
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  client      String
+  address     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  reports    Report[]
+  equipments Equipment[]
+  
+  @@map("projects")
+}
+
+model Report {
+  id               String      @id @default(cuid())
+  title            String
+  reportNumber     String?     @unique
+  date             DateTime    @default(now())
+  weatherConditions String?
+  ambientTemp      Float?
+  notes            String?
+  status           ReportStatus @default(DRAFT)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+  
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  equipmentTests EquipmentTest[]
+  
+  @@map("reports")
+}
+
+model Equipment {
+  id           String        @id @default(cuid())
+  name         String
+  type         EquipmentType
+  brand        String?
+  model        String?
+  serialNumber String?
+  location     String?
+  description  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  equipmentTests EquipmentTest[]
+  
+  @@map("equipments")
+}
+
+model EquipmentTest {
+  id        String   @id @default(cuid())
+  testDate  DateTime @default(now())
+  testType  String   // Ex: "Démarrage", "Fonctionnement", "Arrêt"
+  results   Json     // Stockage flexible des mesures/paramètres
+  comments  String?
+  status    TestStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  reportId    String
+  report      Report    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  @@map("equipment_tests")
+}
+
+// Templates pour standardiser les rapports
+model ReportTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  template    Json     // Structure du template en JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("report_templates")
+}
+
+// Normes et références techniques
+model TechnicalReference {
+  id          String   @id @default(cuid())
+  title       String
+  reference   String   // Ex: "NF EN 12599", "DTU 65.20"
+  description String?
+  category    String?  // Ex: "Aéraulique", "Hydraulique", "Régulation"
+  content     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("technical_references")
+}
+
+enum EquipmentType {
+  CTA
+  AEROTHERME
+  THERMOSTAT
+  POMPE
+  VENTILATEUR
+  ECHANGEUR
+  FILTRE
+  RESEAU_AERAULIQUE
+  RESEAU_HYDRAULIQUE
+  AUTRE
+}
+
+enum ReportStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  VALIDATED
+  ARCHIVED
+}
+
+enum TestStatus {
+  PENDING
+  IN_PROGRESS
+  PASSED
+  FAILED
+  REQUIRES_ATTENTION
+}
