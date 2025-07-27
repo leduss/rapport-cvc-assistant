@@ -15,6 +15,7 @@ import {
   Search,
   Trash2,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -302,6 +303,8 @@ export default function ProjectsAllPage() {
     planned: projects.filter((p) => p.status === 'PLANNED').length,
   };
 
+  const router = useRouter();
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
@@ -312,7 +315,7 @@ export default function ProjectsAllPage() {
             Gestion de tous vos projets CVC
           </p>
         </div>
-        <Button>
+        <Button onClick={() => router.push('/projects/create')}>
           <Plus className="mr-2 h-4 w-4" />
           Nouveau projet
         </Button>
