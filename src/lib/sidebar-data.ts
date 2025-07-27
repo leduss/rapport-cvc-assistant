@@ -106,7 +106,7 @@ export const sidebarData: SidebarData = {
       items: [
         {
           title: 'Tous les projets',
-          url: '/projects',
+          url: '/projects/all',
         },
         {
           title: 'Nouveau projet',

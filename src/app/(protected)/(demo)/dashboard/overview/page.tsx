@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { Calendar, Plus, Search, Thermometer } from 'lucide-react';
 
@@ -21,7 +21,13 @@ import { useWeatherQuery } from '@/hooks/useWeatherQuery';
 import { usePositionStore } from '@/store/positionStore';
 import { useWeatherStore } from '@/store/weatherStore';
 
-import { fetchPostalCode } from '../../../../../../action/weather';
+import {
+  alerts,
+  interventions,
+  metrics,
+  performanceData,
+  urgentReports,
+} from './_components/data';
 
 type Weather = {
   main: { temp: number; humidity: number; pressure: number };
@@ -31,10 +37,7 @@ type Weather = {
 
 export default function OverviewPage() {
   const position = usePositionStore((state) => state.position);
-  const setPosition = usePositionStore((state) => state.setPosition);
   const postalCode = useWeatherStore((state) => state.postalCode);
-  const setPostalCode = useWeatherStore((state) => state.setPostalCode);
-  const fetchAll = useWeatherStore((state) => state.fetchAll);
 
   const {
     data: weather,
@@ -44,142 +47,7 @@ export default function OverviewPage() {
 
   // --- Ajout météo dynamique ---
 
-  useEffect(() => {
-    if (
-      typeof window !== 'undefined' &&
-      'geolocation' in navigator &&
-      !position
-    ) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setPosition({ lat: pos.coords.latitude, lon: pos.coords.longitude });
-        },
-        () => {
-          // setWeatherError('Impossible de récupérer la position.'); // This line was removed
-        }
-      );
-    }
-  }, [setPosition, position]);
-
-  useEffect(() => {
-    if (position) {
-      fetchAll(position.lat, position.lon);
-    }
-  }, [position, fetchAll]);
-
-  useEffect(() => {
-    if (position) {
-      fetchPostalCode(position.lat, position.lon)
-        .then((data) => {
-          setPostalCode(data.address?.postcode || null);
-        })
-        .catch(() => setPostalCode(null));
-    }
-  }, [position, setPostalCode]);
-
   // Données mockées
-  const metrics = {
-    projetsActifs: {
-      value: 12,
-      change: 2,
-      period: 'ce mois',
-      icon: require('lucide-react').Building,
-      color: 'blue',
-    },
-    rapportsEnCours: {
-      value: 8,
-      change: -1,
-      period: 'cette semaine',
-      icon: require('lucide-react').FileText,
-      color: 'orange',
-    },
-    equipementsTestes: {
-      value: 147,
-      change: 23,
-      period: 'ce mois',
-      icon: require('lucide-react').Wrench,
-      color: 'green',
-    },
-    tauxReussite: {
-      value: 94.2,
-      unit: '%',
-      change: 1.2,
-      period: 'vs mois dernier',
-      icon: require('lucide-react').CheckCircle,
-      color: 'emerald',
-    },
-  };
-
-  const interventions = [
-    {
-      date: '2024-01-15',
-      time: '09:00',
-      project: 'Hôpital Saint-Jean',
-      equipment: 'CTA Bloc A - Mise en service',
-      type: 'CTA',
-    },
-    {
-      date: '2024-01-15',
-      time: '14:30',
-      project: 'Centre Atlantis',
-      equipment: 'Aérothermes Zone Food Court',
-      type: 'AEROTHERME',
-    },
-    {
-      date: '2024-01-16',
-      time: '08:00',
-      project: 'TechPark Phase 2',
-      equipment: 'Pompes circuit primaire',
-      type: 'POMPE',
-    },
-  ];
-
-  const urgentReports = [
-    {
-      id: 'RPT-2024-001',
-      project: 'Hôpital Saint-Jean',
-      title: 'Mise en service CTA Bloc A',
-      dueDate: '2024-01-18',
-      progress: 75,
-      priority: 'high',
-    },
-    {
-      id: 'RPT-2024-007',
-      project: 'École des Tilleuls',
-      title: 'Tests ventilateurs classes',
-      dueDate: '2024-01-20',
-      progress: 45,
-      priority: 'medium',
-    },
-  ];
-
-  const alerts = [
-    {
-      type: 'warning',
-      message: '3 équipements nécessitent une re-vérification',
-      project: 'Centre Atlantis',
-      date: 'Il y a 2 heures',
-    },
-    {
-      type: 'info',
-      message: 'Nouveau template CTA disponible',
-      date: 'Hier',
-    },
-    {
-      type: 'success',
-      message: 'Rapport validé par le client',
-      project: 'Bureaux TechPark',
-      date: 'Il y a 1 jour',
-    },
-  ];
-
-  const performanceData = [
-    { equipment: 'CTA', avgTime: 4.2, unit: 'heures', tests: 45 },
-    { equipment: 'Aérothermes', avgTime: 1.8, unit: 'heures', tests: 89 },
-    { equipment: 'Pompes', avgTime: 2.1, unit: 'heures', tests: 156 },
-    { equipment: 'Ventilateurs', avgTime: 0.9, unit: 'heures', tests: 78 },
-    { equipment: 'Thermostats', avgTime: 0.3, unit: 'heures', tests: 234 },
-  ];
 
   function getTestConditions(weather: Weather) {
     if (!weather || !weather.main || !weather.weather) return null;
@@ -232,7 +100,6 @@ export default function OverviewPage() {
 
   return (
     <div className="p-6 space-y-6">
-      
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Overview</h1>
@@ -289,7 +156,7 @@ export default function OverviewPage() {
           <CardContent>
             <div className="space-y-3">
               {isLoading && <div>Chargement de la météo…</div>}
-              
+
               {weather && !weatherError && weather.main && weather.weather && (
                 <>
                   <div className="flex items-center justify-between mb-2">
