@@ -19,14 +19,30 @@ export interface Project {
 
 export interface Equipment {
   id: string;
+  type:
+    | 'VENTILATEUR'
+    | 'BATTERIE'
+    | 'FILTRE'
+    | 'REGISTRE'
+    | 'SONDE'
+    | 'VARIATEUR'
+    | 'AUTRE';
+  designation: string;
+  marque: string;
+  modele: string;
+  numeroSerie: string;
+  caracteristiques: string;
+}
+
+export interface Attachment {
+  id: string;
+  type: 'PHOTO' | 'DOCUMENT';
   name: string;
-  type: EquipmentType;
-  brand?: string | null;
-  model?: string | null;
-  serialNumber?: string | null;
-  location?: string | null;
-  description?: string | null;
-  projectId: string;
+  description: string;
+  url?: string;
+  file?: File;
+  uploadDate?: string;
+  size?: number;
 }
 
 export interface Report {
@@ -56,10 +72,10 @@ export enum EquipmentType {
 }
 
 export enum ReportStatus {
-  DRAFT = 'DRAFT',
-  IN_PROGRESS = 'IN_PROGRESS',
+  ACTIVE = 'ACTIVE',
   COMPLETED = 'COMPLETED',
-  VALIDATED = 'VALIDATED',
+  PLANNED = 'PLANNED',
+  ON_HOLD = 'ON_HOLD',
   ARCHIVED = 'ARCHIVED',
 }
 
@@ -69,4 +85,100 @@ export enum TestStatus {
   PASSED = 'PASSED',
   FAILED = 'FAILED',
   REQUIRES_ATTENTION = 'REQUIRES_ATTENTION',
+}
+
+export enum PriorityLevel {
+  LOW = 'LOW',
+  NORMAL = 'NORMAL',
+  HIGH = 'HIGH',
+}
+
+export interface ElectricalMeasurements {
+  // Tensions phase-neutre
+  voltageL1N: number | '';
+  voltageL2N: number | '';
+  voltageL3N: number | '';
+
+  // Tensions phase-phase ← AJOUTÉES
+  voltageL1L2: number | '';
+  voltageL2L3: number | '';
+  voltageL3L1: number | '';
+
+  // Courants
+  currentL1: number | '';
+  currentL2: number | '';
+  currentL3: number | '';
+
+  // Puissances
+  totalPower: number | '';
+  cosPhi: number | '';
+  frequency: number | '';
+
+  // Protection
+  insulationResistance: number | '';
+  earthResistance: number | '';
+}
+
+export interface AcousticMeasurements {
+  // Niveaux sonores globaux
+  soundLevelMachine: number | '';
+  soundLevelAmbient: number | '';
+  soundLevelSoufflage: number | '';
+  soundLevelReprise: number | '';
+  soundLevelExtraction: number | '';
+
+  // Conditions de mesure
+  measurementDistance: number | '';
+  backgroundNoise: number | '';
+
+  // Analyse fréquentielle (optionnel)
+  octave63Hz: number | '';
+  octave125Hz: number | '';
+  octave250Hz: number | '';
+  octave500Hz: number | '';
+  octave1kHz: number | '';
+  octave2kHz: number | '';
+  octave4kHz: number | '';
+  octave8kHz: number | '';
+}
+
+export interface ConformityChecks {
+  // Performances aérauliques
+  debitConformeSpec: boolean;
+  pressionConformeSpec: boolean;
+  vitesseAirConforme: boolean;
+
+  // Performances thermiques
+  temperatureConformeSpec: boolean;
+  deltaTemperatureConforme: boolean;
+
+  // Acoustique
+  niveauSonoreConforme: boolean;
+
+  // Électrique
+  tensionConforme: boolean;
+  intensiteConforme: boolean;
+  isolementConforme: boolean;
+  terreConforme: boolean;
+
+  // Sécurité et réglementation
+  securiteConforme: boolean;
+  marquageCEPresent: boolean;
+  arretUrgenceFonctionnel: boolean;
+  protectionsPresentes: boolean;
+
+  // Documentation
+  documentationFournie: boolean;
+  schemasAJour: boolean;
+  noticesPresentes: boolean;
+}
+
+export interface AirBalancing {
+  id: string;
+  type: 'SOUFFLAGE' | 'REPRISE' | 'EXTRACTION';
+  designation: string; // Ex: "Bouche bureau 101"
+  debitTheorique: number | ''; // Débit prévu au CCTP
+  debitMesure: number | ''; // Débit mesuré
+  ecart: number | ''; // Écart en %
+  reglage: string; // Position registre/bouche
 }

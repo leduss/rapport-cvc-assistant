@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+import { Project } from '@prisma/client';
 import {
   Activity,
   Building,
@@ -17,7 +18,6 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -83,60 +83,18 @@ const TableCell = ({
     {children}
   </td>
 );
+import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
+import { projects } from '@/lib/data/projects';
+import { PriorityLevel } from '@/types';
 
-import { ProjectCard } from './_components/project-card';
+import {
+  getPriorityBadge,
+  getStatusBadge,
+  ProjectCard,
+} from './_components/project-card';
 
-// Types pour les projets
-export interface Project {
-  id: string;
-  name: string;
-  client: string;
-  address: string;
-  status: 'ACTIVE' | 'COMPLETED' | 'PLANNED' | 'ON_HOLD' | 'ARCHIVED';
-  progress: number;
-  createdAt: string;
-  updatedAt: string;
-  equipmentsCount: number;
-  reportsCount: number;
-  nextIntervention?: string;
-  description?: string;
-}
-
-// Composant pour une carte projet (vue grille)
-
-// Composant pour une ligne projet (vue tableau)
 const ProjectRow = ({ project }: { project: Project }) => {
-  const getStatusBadge = (status: string) => {
-    const statusConfig = {
-      ACTIVE: {
-        label: 'Actif',
-        variant: 'default' as const,
-      },
-      COMPLETED: { label: 'Terminé', variant: 'secondary' as const },
-      PLANNED: { label: 'Planifié', variant: 'outline' as const },
-      ON_HOLD: { label: 'En attente', variant: 'destructive' as const },
-      ARCHIVED: { label: 'Archivé', variant: 'secondary' as const },
-    };
-
-    const config = statusConfig[status as keyof typeof statusConfig];
-    return (
-      <Badge
-        variant={config.variant}
-        className={cn(
-          config.label === 'Planifié' && 'bg-orange-500',
-          config.label === 'En attente' && 'bg-red-500',
-          config.label === 'Actif' && 'bg-green-500',
-          config.label === 'Terminé' && 'bg-blue-500',
-          'flex items-center gap-1'
-        )}
-      >
-        {config.label}
-      </Badge>
-    );
-  };
-
   return (
     <TableRow>
       <TableCell>
@@ -145,10 +103,11 @@ const ProjectRow = ({ project }: { project: Project }) => {
           <div className="text-sm text-muted-foreground">{project.client}</div>
         </div>
       </TableCell>
-      <TableCell>
-        <div className="text-sm">{project.address}</div>
-      </TableCell>
+      <TableCell>{project.address}</TableCell>
       <TableCell>{getStatusBadge(project.status)}</TableCell>
+      <TableCell>
+        {getPriorityBadge(project.priority as PriorityLevel)}
+      </TableCell>
       <TableCell>
         <div className="flex items-center space-x-2">
           <div className="w-16 bg-gray-200 rounded-full h-2">
@@ -160,9 +119,10 @@ const ProjectRow = ({ project }: { project: Project }) => {
           <span className="text-sm">{project.progress}%</span>
         </div>
       </TableCell>
-      <TableCell className="text-center">{project.equipmentsCount}</TableCell>
       <TableCell className="text-center">{project.reportsCount}</TableCell>
-      <TableCell>{project.nextIntervention || '-'}</TableCell>
+      <TableCell>
+        {new Date(project.nextIntervention).toLocaleDateString()}
+      </TableCell>
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -195,104 +155,26 @@ export default function ProjectsAllPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [selectedPriority, setSelectedPriority] = useState<
+    'all' | PriorityLevel
+  >('all');
 
   // Données mockées des projets
-  const projects: Project[] = [
-    {
-      id: '1',
-      name: 'Hôpital Saint-Jean - Rénovation CVC',
-      client: 'CHU Bordeaux',
-      address: '1 rue Dubernat, 33404 Talence',
-      status: 'ACTIVE',
-      progress: 68,
-      createdAt: '2024-01-10',
-      updatedAt: '2024-01-25',
-      equipmentsCount: 23,
-      reportsCount: 8,
-      nextIntervention: '15 Jan 2024',
-      description: 'Rénovation complète du système CVC - Blocs opératoires',
-    },
-    {
-      id: '2',
-      name: 'Centre Commercial Atlantis',
-      client: 'Immochan',
-      address: "200 avenue de l'Europe, 33700 Mérignac",
-      status: 'ACTIVE',
-      progress: 94,
-      createdAt: '2023-12-01',
-      updatedAt: '2024-01-26',
-      equipmentsCount: 45,
-      reportsCount: 15,
-      nextIntervention: '17 Jan 2024',
-      description: 'Installation CVC zones commerciales et restaurants',
-    },
-    {
-      id: '3',
-      name: 'TechPark Phase 2 - Bureaux',
-      client: 'Nexity',
-      address: '15 cours Édouard Vaillant, 33300 Bordeaux',
-      status: 'PLANNED',
-      progress: 15,
-      createdAt: '2024-01-20',
-      updatedAt: '2024-01-26',
-      equipmentsCount: 67,
-      reportsCount: 2,
-      nextIntervention: '20 Jan 2024',
-      description: 'Bureaux haute performance énergétique',
-    },
-    {
-      id: '4',
-      name: 'École Primaire des Tilleuls',
-      client: 'Mairie de Pessac',
-      address: '5 rue des Tilleuls, 33600 Pessac',
-      status: 'ACTIVE',
-      progress: 82,
-      createdAt: '2023-11-15',
-      updatedAt: '2024-01-24',
-      equipmentsCount: 12,
-      reportsCount: 6,
-      nextIntervention: '18 Jan 2024',
-      description: 'Ventilation salles de classe et réfectoire',
-    },
-    {
-      id: '5',
-      name: 'Résidence Étudiante Campus',
-      client: 'CROUS Aquitaine',
-      address: '120 cours de la Libération, 33405 Talence',
-      status: 'COMPLETED',
-      progress: 100,
-      createdAt: '2023-09-01',
-      updatedAt: '2023-12-20',
-      equipmentsCount: 89,
-      reportsCount: 22,
-      description: 'CVC 350 logements étudiants',
-    },
-    {
-      id: '6',
-      name: 'Maison de Retraite Les Jardins',
-      client: 'Korian',
-      address: '45 avenue Thiers, 33100 Bordeaux',
-      status: 'ON_HOLD',
-      progress: 35,
-      createdAt: '2024-01-05',
-      updatedAt: '2024-01-22',
-      equipmentsCount: 28,
-      reportsCount: 4,
-      description: 'En attente validation client',
-    },
-  ];
 
   // Filtrage des projets
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.address.toLowerCase().includes(searchTerm.toLowerCase());
+      project.address?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       selectedStatus === 'all' || project.status === selectedStatus;
 
-    return matchesSearch && matchesStatus;
+    const matchesPriority =
+      selectedPriority === 'all' || project.priority === selectedPriority;
+
+    return matchesSearch && matchesStatus && matchesPriority;
   });
 
   // Stats rapides
@@ -388,24 +270,65 @@ export default function ProjectsAllPage() {
                 Filtrer
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setSelectedStatus('all')}>
-                Tous les projets
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSelectedStatus('ACTIVE')}>
-                Actifs
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSelectedStatus('COMPLETED')}>
-                Terminés
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSelectedStatus('PLANNED')}>
-                Planifiés
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSelectedStatus('ON_HOLD')}>
-                En attente
-              </DropdownMenuItem>
+
+            <DropdownMenuContent className="flex gap-6">
+              {/* Filtres par statut */}
+              <div>
+                <DropdownMenuItem onClick={() => setSelectedStatus('all')}>
+                  Par projets
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedStatus('ACTIVE')}>
+                  Actifs
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setSelectedStatus('COMPLETED')}
+                >
+                  Terminés
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedStatus('PLANNED')}>
+                  Planifiés
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSelectedStatus('ON_HOLD')}>
+                  En attente
+                </DropdownMenuItem>
+              </div>
+
+              {/* Séparateur */}
+              <Separator orientation="vertical" className="" />
+
+              {/* Filtres par priorité */}
+              <div>
+                <DropdownMenuItem onClick={() => setSelectedPriority('all')}>
+                  Par priorité
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setSelectedPriority(PriorityLevel.LOW)}
+                >
+                  Faible
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setSelectedPriority(PriorityLevel.NORMAL)}
+                >
+                  Normale
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setSelectedPriority(PriorityLevel.HIGH)}
+                >
+                  Élevée
+                </DropdownMenuItem>
+              </div>
             </DropdownMenuContent>
           </DropdownMenu>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setSelectedStatus('all');
+              setSelectedPriority('all');
+              setSearchTerm('');
+            }}
+          >
+            Réinitialiser les filtres
+          </Button>
         </div>
 
         <Tabs
@@ -435,11 +358,11 @@ export default function ProjectsAllPage() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Projet</TableHead>
+                <TableHead>Client</TableHead>
                 <TableHead>Adresse</TableHead>
                 <TableHead>Statut</TableHead>
+                <TableHead>Priorité</TableHead>
                 <TableHead>Progression</TableHead>
-                <TableHead>Équipements</TableHead>
                 <TableHead>Rapports</TableHead>
                 <TableHead>Prochaine intervention</TableHead>
                 <TableHead></TableHead>

@@ -176,6 +176,11 @@ export const sidebarData: SidebarData = {
           url: '/reports',
         },
         {
+          title: 'Nouveau rapport CTA',
+          url: '/reports/create/cta',
+          icon: Plus,
+        },
+        {
           title: 'Nouveau rapport',
           url: '/reports/create',
           icon: Plus,
