@@ -11,10 +11,10 @@ interface CTAHeaderProps {
 
 export const CTAHeader: React.FC<CTAHeaderProps> = ({ onSave }) => {
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div className="mb-6 flex items-center justify-between">
       <div className="flex items-center space-x-4">
         <div>
-          <h1 className="text-3xl font-bold flex items-center">
+          <h1 className="flex items-center text-3xl font-bold">
             <Wind className="mr-3 h-8 w-8 text-blue-600" />
             Rapport de mise en service CTA
           </h1>

@@ -65,31 +65,31 @@ export function Navbar() {
   }, [position, setPostalCode]);
 
   return (
-    <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
+    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary sticky top-0 z-10 w-full shadow backdrop-blur">
       <div className="mx-4 flex h-14 items-center sm:mx-8">
         <div className="flex items-center gap-8 space-x-4 lg:space-x-0">
           <SidebarTrigger />
-          <span className="text-sm text-muted-foreground font-medium hidden sm:inline-block">
+          <span className="text-muted-foreground hidden text-sm font-medium sm:inline-block">
             {getTodayFr()}
           </span>
           {isLoading && (
-            <span className="text-xs text-muted-foreground ml-2">
+            <span className="text-muted-foreground ml-2 text-xs">
               Chargement météo…
             </span>
           )}
           {weatherError && (
-            <span className="text-xs text-red-600 ml-2">
+            <span className="ml-2 text-xs text-red-600">
               {String(weatherError)}
             </span>
           )}
           {weather && weather.main && weather.weather && !weatherError && (
-            <span className="flex items-center text-sm font-medium text-muted-foreground ml-2">
+            <span className="text-muted-foreground ml-2 flex items-center text-sm font-medium">
               <Image
                 src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
                 alt={weather.weather[0].description}
                 width={32}
                 height={32}
-                className="w-7 h-7 -ml-1 mr-1"
+                className="mr-1 -ml-1 h-7 w-7"
                 style={{ display: 'inline-block', verticalAlign: 'middle' }}
               />
               {Math.round(weather.main.temp)}°C

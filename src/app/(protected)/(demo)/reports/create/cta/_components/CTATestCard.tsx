@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 // Import des composants existants
 import { AcousticMeasurementsCard } from './AcousticMeasurementsCard';
+import { AirBalancingCard } from './AirBalancingCard';
 import { AirFlowMeasurementsCard } from './AirFlowMeasurementsCard';
 import { AttachmentsCard } from './AttachmentsCard';
 import { ControlTestsCard } from './ControlTestsCard';
@@ -18,7 +19,7 @@ import { FunctionalTestsCard } from './FunctionalTestsCard';
 import { PreCommissioningCard } from './PreCommissioningCard';
 import { TestStatusSection } from './TestStatusSection';
 import { ThermalMeasurementsCard } from './ThermalMeasurementsCard';
-import { CTATest } from './type/type';
+import { CTATest, SummaryRow } from './type/type';
 
 // NOUVEAUX IMPORTS
 
@@ -47,6 +48,29 @@ interface CTATestCardProps {
     description: string
   ) => void;
   onDeleteAttachment: (testId: string, attachmentId: string) => void;
+  onAddAirBalancingMeasurement: (testId: string) => void;
+  onUpdateAirBalancingMeasurement: (
+    testId: string,
+    measurementId: string,
+    updates: any
+  ) => void;
+  onDeleteAirBalancingMeasurement: (
+    testId: string,
+    measurementId: string
+  ) => void;
+  onAddAirBalancingScenario: (testId: string) => void;
+  onUpdateAirBalancingScenario: (
+    testId: string,
+    scenarioId: string,
+    updates: any
+  ) => void;
+  onDeleteAirBalancingScenario: (testId: string, scenarioId: string) => void;
+  getAirBalancingSummary: (testId: string, scenarioId: string) => SummaryRow[];
+  getAirBalancingStats: (
+    testId: string,
+    scenarioId: string,
+    typeFilter: any
+  ) => any;
 }
 
 export const CTATestCard: React.FC<CTATestCardProps> = ({
@@ -59,6 +83,14 @@ export const CTATestCard: React.FC<CTATestCardProps> = ({
   onAddAttachment,
   onUpdateAttachmentDescription,
   onDeleteAttachment,
+  onAddAirBalancingMeasurement,
+  onUpdateAirBalancingMeasurement,
+  onDeleteAirBalancingMeasurement,
+  onAddAirBalancingScenario,
+  onUpdateAirBalancingScenario,
+  onDeleteAirBalancingScenario,
+  getAirBalancingSummary,
+  getAirBalancingStats,
 }) => {
   return (
     <Card className="relative">
@@ -109,7 +141,7 @@ export const CTATestCard: React.FC<CTATestCardProps> = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4 text-sm text-muted-foreground">
+        <div className="text-muted-foreground grid grid-cols-3 gap-4 text-sm">
           <div>
             <span className="font-medium">Localisation:</span> {test.location}
           </div>
@@ -124,7 +156,7 @@ export const CTATestCard: React.FC<CTATestCardProps> = ({
 
       <CardContent className="space-y-6">
         <Tabs defaultValue="preliminary" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-2">
+          <TabsList className="mb-2 grid w-full grid-cols-3">
             <TabsTrigger value="preliminary" className="text-xs">
               Préliminaire
             </TabsTrigger>
@@ -137,7 +169,11 @@ export const CTATestCard: React.FC<CTATestCardProps> = ({
           </TabsList>
 
           {/* Deuxième ligne d'onglets pour les nouveaux composants */}
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="airbalancing" className="text-xs">
+              Équilibrage
+            </TabsTrigger>
+
             <TabsTrigger value="equipment" className="text-xs">
               Équipements
             </TabsTrigger>
@@ -232,6 +268,29 @@ export const CTATestCard: React.FC<CTATestCardProps> = ({
                   controlTests: { ...test.controlTests, [field]: value },
                 })
               }
+            />
+          </TabsContent>
+          <TabsContent value="airbalancing" className="mt-4">
+            <AirBalancingCard
+              testId={test.id}
+              measurements={test.airBalancingMeasurements || []}
+              scenarios={test.airBalancingScenarios || []}
+              onAddMeasurement={() => onAddAirBalancingMeasurement(test.id)}
+              onUpdateMeasurement={(measurementId, updates) =>
+                onUpdateAirBalancingMeasurement(test.id, measurementId, updates)
+              }
+              onDeleteMeasurement={(measurementId) =>
+                onDeleteAirBalancingMeasurement(test.id, measurementId)
+              }
+              onAddScenario={() => onAddAirBalancingScenario(test.id)}
+              onUpdateScenario={(scenarioId, updates) =>
+                onUpdateAirBalancingScenario(test.id, scenarioId, updates)
+              }
+              onDeleteScenario={(scenarioId) =>
+                onDeleteAirBalancingScenario(test.id, scenarioId)
+              }
+              getAirBalancingSummary={getAirBalancingSummary}
+              getAirBalancingStats={getAirBalancingStats}
             />
           </TabsContent>
 

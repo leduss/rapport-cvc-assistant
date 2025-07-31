@@ -76,7 +76,7 @@ export const CTAGeneralInfoForm: React.FC<CTAGeneralInfoFormProps> = ({
                   <SelectItem key={project.id} value={project.id}>
                     <div className="flex flex-col">
                       <span className="font-medium">{project.name}</span>
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-muted-foreground text-xs">
                         {project.client}
                       </span>
                     </div>

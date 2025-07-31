@@ -111,7 +111,7 @@ export const getStatusBadge = (status: ProjectStatus) => {
 
 export const ProjectCard = ({ project }: { project: Project }) => {
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="transition-shadow hover:shadow-lg">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between pb-2">
           {getPriorityBadge(project.priority as PriorityLevel)}
@@ -142,11 +142,11 @@ export const ProjectCard = ({ project }: { project: Project }) => {
 
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <CardTitle className="text-lg font-semibold line-clamp-1">
+            <CardTitle className="line-clamp-1 text-lg font-semibold">
               {project.name}
             </CardTitle>
-            <CardDescription className="flex items-center mt-1">
-              <Building className="h-4 w-4 mr-1" />
+            <CardDescription className="mt-1 flex items-center">
+              <Building className="mr-1 h-4 w-4" />
               {project.client}
             </CardDescription>
           </div>
@@ -162,35 +162,35 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         </div>
 
         {/* Progress bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="h-2 w-full rounded-full bg-gray-200">
           <div
-            className="bg-blue-600 h-2 rounded-full transition-all"
+            className="h-2 rounded-full bg-blue-600 transition-all"
             style={{ width: `${project.progress}%` }}
           />
         </div>
 
         {/* Adresse */}
         <div className="flex items-center text-sm text-gray-600">
-          <MapPin className="h-4 w-4 mr-2 flex-shrink-0" />
+          <MapPin className="mr-2 h-4 w-4 flex-shrink-0" />
           <span className="line-clamp-1">{project.address}</span>
         </div>
 
         {/* Stats */}
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-gray-600">
-            <Users className="h-4 w-4 mr-1" />
+            <Users className="mr-1 h-4 w-4" />
           </div>
           <div className="flex items-center text-gray-600">
-            <Calendar className="h-4 w-4 mr-1" />
+            <Calendar className="mr-1 h-4 w-4" />
             {project.reportsCount} rapports
           </div>
         </div>
 
         {/* Prochaine intervention */}
         {project.nextIntervention && (
-          <div className="p-2 bg-blue-50 rounded-lg">
+          <div className="rounded-lg bg-blue-50 p-2">
             <div className="flex items-center text-sm text-blue-800">
-              <Clock className="h-4 w-4 mr-2" />
+              <Clock className="mr-2 h-4 w-4" />
               Prochaine intervention:{' '}
               {new Date(project.nextIntervention).toLocaleDateString('fr-FR')}
             </div>

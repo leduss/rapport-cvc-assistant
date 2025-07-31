@@ -22,7 +22,7 @@ export default function AdminPanelLayout({
           <AppSidebar />
           <main
             className={cn(
-              'min-h-[calc(100vh)] w-full bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300'
+              'min-h-[calc(100vh)] w-full bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
             )}
           >
             {children}

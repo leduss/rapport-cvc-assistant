@@ -50,7 +50,7 @@ export const TestStatusSection: React.FC<TestStatusSectionProps> = ({
           <Label className="text-sm">Commentaires</Label>
           <Textarea
             placeholder="Observations générales, anomalies détectées..."
-            className="text-sm resize-none"
+            className="resize-none text-sm"
             rows={2}
             value={test.comments}
             onChange={(e) => onUpdate({ comments: e.target.value })}
@@ -61,7 +61,7 @@ export const TestStatusSection: React.FC<TestStatusSectionProps> = ({
           <Label className="text-sm">Recommandations</Label>
           <Textarea
             placeholder="Actions correctives, maintenance préventive..."
-            className="text-sm resize-none"
+            className="resize-none text-sm"
             rows={2}
             value={test.recommendations}
             onChange={(e) => onUpdate({ recommendations: e.target.value })}

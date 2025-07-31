@@ -202,10 +202,10 @@ export default function NewProjectPage() {
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div>
-            <h1 className="text-3xl font-bold flex items-center">
+            <h1 className="flex items-center text-3xl font-bold">
               <Building className="mr-3 h-8 w-8 text-blue-600" />
               Nouveau Projet
             </h1>
@@ -227,7 +227,7 @@ export default function NewProjectPage() {
             <CardDescription>Détails de base du projet</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name">Nom du projet *</Label>
                 <Input
@@ -239,7 +239,7 @@ export default function NewProjectPage() {
                   className={errors.name ? 'border-red-500' : ''}
                 />
                 {errors.name && (
-                  <p className="text-red-500 text-sm">{errors.name}</p>
+                  <p className="text-sm text-red-500">{errors.name}</p>
                 )}
               </div>
 
@@ -254,7 +254,7 @@ export default function NewProjectPage() {
                   className={errors.client ? 'border-red-500' : ''}
                 />
                 {errors.client && (
-                  <p className="text-red-500 text-sm">{errors.client}</p>
+                  <p className="text-sm text-red-500">{errors.client}</p>
                 )}
               </div>
             </div>
@@ -270,7 +270,7 @@ export default function NewProjectPage() {
                 className={errors.address ? 'border-red-500' : ''}
               />
               {errors.address && (
-                <p className="text-red-500 text-sm">{errors.address}</p>
+                <p className="text-sm text-red-500">{errors.address}</p>
               )}
             </div>
 
@@ -299,7 +299,7 @@ export default function NewProjectPage() {
             <CardDescription>Dates et informations financières</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="space-y-2">
                 <Label htmlFor="startDate">Date de début *</Label>
                 <Input
@@ -313,7 +313,7 @@ export default function NewProjectPage() {
                   className={errors.startDate ? 'border-red-500' : ''}
                 />
                 {errors.startDate && (
-                  <p className="text-red-500 text-sm">{errors.startDate}</p>
+                  <p className="text-sm text-red-500">{errors.startDate}</p>
                 )}
               </div>
 
@@ -328,7 +328,7 @@ export default function NewProjectPage() {
                   className={errors.endDate ? 'border-red-500' : ''}
                 />
                 {errors.endDate && (
-                  <p className="text-red-500 text-sm">{errors.endDate}</p>
+                  <p className="text-sm text-red-500">{errors.endDate}</p>
                 )}
               </div>
 
@@ -344,7 +344,7 @@ export default function NewProjectPage() {
                   className={errors.budget ? 'border-red-500' : ''}
                 />
                 {errors.budget && (
-                  <p className="text-red-500 text-sm">{errors.budget}</p>
+                  <p className="text-sm text-red-500">{errors.budget}</p>
                 )}
               </div>
             </div>
@@ -358,7 +358,7 @@ export default function NewProjectPage() {
             <CardDescription>Priorité et catégorie</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label>Priorité</Label>
                 <div className="flex space-x-2">
@@ -367,7 +367,7 @@ export default function NewProjectPage() {
                       key={priority}
                       type="button"
                       onClick={() => handleInputChange('priority', priority)}
-                      className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                      className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                         formData.priority === priority
                           ? priorityColors[priority]
                           : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -387,7 +387,7 @@ export default function NewProjectPage() {
                   onChange={(e) =>
                     handleInputChange('category', e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 >
                   <option value="CVC">CVC Général</option>
                   <option value="CHAUFFAGE">Chauffage</option>

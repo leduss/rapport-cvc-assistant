@@ -24,24 +24,24 @@ const AlertCard = ({
   <div
     className={
       bg && color
-        ? `flex items-start space-x-3 p-3 border rounded-lg ${bg}`
-        : 'flex items-start space-x-3 p-3 border rounded-lg'
+        ? `flex items-start space-x-3 rounded-lg border p-3 ${bg}`
+        : 'flex items-start space-x-3 rounded-lg border p-3'
     }
   >
     {type === 'warning' && (
-      <AlertTriangle className="h-4 w-4 text-orange-500 mt-0.5" />
+      <AlertTriangle className="mt-0.5 h-4 w-4 text-orange-500" />
     )}
-    {type === 'info' && <Info className="h-4 w-4 text-blue-500 mt-0.5" />}
+    {type === 'info' && <Info className="mt-0.5 h-4 w-4 text-blue-500" />}
     {type === 'success' && (
-      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+      <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
     )}
-    <div className="flex-1 min-w-0">
+    <div className="min-w-0 flex-1">
       <p className={color ? `text-sm text-${color}` : 'text-sm font-medium'}>
         {emoji && <span className="mr-1">{emoji}</span>}
         {message}
       </p>
-      {project && <p className="text-xs text-muted-foreground">{project}</p>}
-      {date && <p className="text-xs text-muted-foreground">{date}</p>}
+      {project && <p className="text-muted-foreground text-xs">{project}</p>}
+      {date && <p className="text-muted-foreground text-xs">{date}</p>}
     </div>
   </div>
 );

@@ -26,7 +26,7 @@ export const ElectricalMeasurementsCard: React.FC<
       <CardContent className="space-y-4">
         {/* Tensions */}
         <div>
-          <h4 className="text-sm font-semibold mb-2">Tensions (V)</h4>
+          <h4 className="mb-2 text-sm font-semibold">Tensions (V)</h4>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-2">
               <Label className="text-xs">L1-N</Label>
@@ -69,7 +69,7 @@ export const ElectricalMeasurementsCard: React.FC<
 
         {/* Courants */}
         <div>
-          <h4 className="text-sm font-semibold mb-2">Intensités (A)</h4>
+          <h4 className="mb-2 text-sm font-semibold">Intensités (A)</h4>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-2">
               <Label className="text-xs">L1</Label>

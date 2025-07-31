@@ -58,7 +58,7 @@ const TableRow = ({
   ...props
 }: React.HTMLAttributes<HTMLTableRowElement>) => (
   <tr
-    className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
+    className="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors"
     {...props}
   >
     {children}
@@ -69,7 +69,7 @@ const TableHead = ({
   ...props
 }: React.HTMLAttributes<HTMLTableCellElement>) => (
   <th
-    className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0"
+    className="text-muted-foreground h-12 px-4 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0"
     {...props}
   >
     {children}
@@ -100,7 +100,7 @@ const ProjectRow = ({ project }: { project: Project }) => {
       <TableCell>
         <div>
           <div className="font-medium">{project.name}</div>
-          <div className="text-sm text-muted-foreground">{project.client}</div>
+          <div className="text-muted-foreground text-sm">{project.client}</div>
         </div>
       </TableCell>
       <TableCell>{project.address}</TableCell>
@@ -110,9 +110,9 @@ const ProjectRow = ({ project }: { project: Project }) => {
       </TableCell>
       <TableCell>
         <div className="flex items-center space-x-2">
-          <div className="w-16 bg-gray-200 rounded-full h-2">
+          <div className="h-2 w-16 rounded-full bg-gray-200">
             <div
-              className="bg-blue-600 h-2 rounded-full"
+              className="h-2 rounded-full bg-blue-600"
               style={{ width: `${project.progress}%` }}
             />
           </div>
@@ -188,7 +188,7 @@ export default function ProjectsAllPage() {
   const router = useRouter();
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -209,7 +209,7 @@ export default function ProjectsAllPage() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Total</p>
+                <p className="text-muted-foreground text-sm">Total</p>
                 <p className="text-2xl font-bold">{stats.total}</p>
               </div>
               <Building className="h-8 w-8 text-blue-600" />
@@ -220,7 +220,7 @@ export default function ProjectsAllPage() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Actifs</p>
+                <p className="text-muted-foreground text-sm">Actifs</p>
                 <p className="text-2xl font-bold">{stats.active}</p>
               </div>
               <Activity className="h-8 w-8 text-green-600" />
@@ -231,7 +231,7 @@ export default function ProjectsAllPage() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Terminés</p>
+                <p className="text-muted-foreground text-sm">Terminés</p>
                 <p className="text-2xl font-bold">{stats.completed}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-gray-600" />
@@ -242,7 +242,7 @@ export default function ProjectsAllPage() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Planifiés</p>
+                <p className="text-muted-foreground text-sm">Planifiés</p>
                 <p className="text-2xl font-bold">{stats.planned}</p>
               </div>
               <Clock className="h-8 w-8 text-orange-600" />
@@ -255,10 +255,10 @@ export default function ProjectsAllPage() {
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform" />
             <Input
               placeholder="Rechercher un projet..."
-              className="pl-10 w-80"
+              className="w-80 pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -379,10 +379,10 @@ export default function ProjectsAllPage() {
 
       {/* Message si aucun résultat */}
       {filteredProjects.length === 0 && (
-        <div className="text-center py-12">
-          <Building className="mx-auto h-12 w-12 text-muted-foreground" />
+        <div className="py-12 text-center">
+          <Building className="text-muted-foreground mx-auto h-12 w-12" />
           <h3 className="mt-4 text-lg font-semibold">Aucun projet trouvé</h3>
-          <p className="mt-2 text-muted-foreground">
+          <p className="text-muted-foreground mt-2">
             Essayez de modifier vos critères de recherche ou créez un nouveau
             projet.
           </p>

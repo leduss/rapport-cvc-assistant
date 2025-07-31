@@ -126,7 +126,7 @@ export const ControlTestsCard: React.FC<ControlTestsCardProps> = ({
               <div className="flex-1">
                 <Label className="text-sm font-medium">{label}</Label>
                 {description && (
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <p className="text-muted-foreground mt-0.5 text-xs">
                     {description}
                   </p>
                 )}
@@ -137,7 +137,7 @@ export const ControlTestsCard: React.FC<ControlTestsCardProps> = ({
                   onUpdate(key, newValue)
                 }
               >
-                <SelectTrigger className="w-36 h-8">
+                <SelectTrigger className="h-8 w-36">
                   <SelectValue className={getStatusColor(tests[key])}>
                     <span className="flex items-center gap-2">
                       <span className="font-semibold">
@@ -163,7 +163,7 @@ export const ControlTestsCard: React.FC<ControlTestsCardProps> = ({
                           <span className={getStatusColor(value)}>{label}</span>
                         </div>
                         {description && (
-                          <p className="text-xs text-muted-foreground mt-0.5 ml-6">
+                          <p className="text-muted-foreground mt-0.5 ml-6 text-xs">
                             {description}
                           </p>
                         )}
@@ -177,7 +177,7 @@ export const ControlTestsCard: React.FC<ControlTestsCardProps> = ({
         ))}
 
         {/* Note d'information */}
-        <div className="mt-4 p-3 bg-blue-50 rounded-md">
+        <div className="mt-4 rounded-md bg-blue-50 p-3">
           <p className="text-xs text-blue-700">
             <strong>Note :</strong> Marquez &quot;Non applicable&quot; pour les
             fonctions de régulation non installées ou non configurées sur cette

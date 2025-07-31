@@ -99,7 +99,7 @@ export default function OverviewPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Overview</h1>
@@ -159,7 +159,7 @@ export default function OverviewPage() {
 
               {weather && !weatherError && weather.main && weather.weather && (
                 <>
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="mb-2 flex items-center justify-between">
                     <span className="text-sm font-semibold">
                       {postalCode && postalCode} {weather.name}
                       {weather.sys && weather.sys.country

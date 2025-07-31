@@ -15,7 +15,7 @@ const MetricCard = ({
 }) => (
   <Card>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle className="text-sm font-medium text-muted-foreground">
+      <CardTitle className="text-muted-foreground text-sm font-medium">
         {title}
       </CardTitle>
       <Icon className={`h-4 w-4 text-${color}-600`} />
@@ -25,7 +25,7 @@ const MetricCard = ({
         {value}
         {unit}
       </div>
-      <div className="flex items-center text-xs text-muted-foreground">
+      <div className="text-muted-foreground flex items-center text-xs">
         {change > 0 ? (
           <TrendingUp className="mr-1 h-3 w-3 text-green-600" />
         ) : (

@@ -30,7 +30,7 @@ export default function AddEquipmentSelector({
   const [selectedEquipment, setSelectedEquipment] = useState<string>('');
 
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex items-center gap-4">
       {/* Sélection du type d’équipement */}
       <Select
         value={selectedType}

@@ -111,7 +111,7 @@ const EquipmentTestCard = ({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Gauge className="h-4 w-4 text-muted-foreground" />
+            <Gauge className="text-muted-foreground h-4 w-4" />
             <CardTitle className="text-base">{test.equipmentName}</CardTitle>
             <Badge variant="outline" className="text-xs">
               {test.equipmentType}
@@ -226,7 +226,7 @@ const EquipmentTestCard = ({
           <Label className="text-sm">Commentaires</Label>
           <Textarea
             placeholder="Observations, anomalies détectées, recommandations..."
-            className="text-sm resize-none"
+            className="resize-none text-sm"
             rows={2}
             value={test.comments}
             onChange={(e) => onUpdate(test.id, { comments: e.target.value })}
@@ -365,16 +365,16 @@ export default function NewReportPage() {
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-6xl">
+    <div className="container mx-auto max-w-6xl p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Retour
           </Button>
           <div>
-            <h1 className="text-3xl font-bold flex items-center">
+            <h1 className="flex items-center text-3xl font-bold">
               <FileText className="mr-3 h-8 w-8" />
               Nouveau rapport de mise en service
             </h1>
@@ -460,7 +460,7 @@ export default function NewReportPage() {
                         <SelectItem key={project.id} value={project.id}>
                           <div className="flex flex-col">
                             <span className="font-medium">{project.name}</span>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-muted-foreground text-xs">
                               {project.client}
                             </span>
                           </div>
@@ -536,7 +536,7 @@ export default function NewReportPage() {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold">Tests d&#39;équipements</h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Ajoutez et configurez les tests pour chaque équipement
               </p>
             </div>
@@ -607,7 +607,7 @@ export default function NewReportPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => addEquipmentsByType(type)}
-                      className="text-xs px-2"
+                      className="px-2 text-xs"
                     >
                       +{count} {type}
                     </Button>
@@ -620,8 +620,8 @@ export default function NewReportPage() {
           <div className="space-y-4">
             {equipmentTests.length === 0 ? (
               <Card className="p-12 text-center">
-                <Gauge className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium mb-2">
+                <Gauge className="text-muted-foreground mx-auto mb-4 h-12 w-12" />
+                <h3 className="mb-2 text-lg font-medium">
                   Aucun équipement ajouté
                 </h3>
                 <p className="text-muted-foreground mb-4">
@@ -637,7 +637,7 @@ export default function NewReportPage() {
                     }
                   }}
                 >
-                  <SelectTrigger className="w-64 mx-auto">
+                  <SelectTrigger className="mx-auto w-64">
                     <SelectValue placeholder="Ajouter un équipement" />
                   </SelectTrigger>
                   <SelectContent>
@@ -686,7 +686,7 @@ export default function NewReportPage() {
                   <h2 className="text-2xl font-bold">
                     {formData.title || 'Titre du rapport'}
                   </h2>
-                  <div className="grid grid-cols-2 gap-4 mt-4 text-sm">
+                  <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="font-medium">Numéro:</span>{' '}
                       {formData.reportNumber}
@@ -708,7 +708,7 @@ export default function NewReportPage() {
 
                 {/* Résumé des tests */}
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">
+                  <h3 className="mb-4 text-lg font-semibold">
                     Résumé des tests
                   </h3>
                   {equipmentTests.length === 0 ? (
@@ -720,13 +720,13 @@ export default function NewReportPage() {
                       {equipmentTests.map((test) => (
                         <div
                           key={test.id}
-                          className="flex items-center justify-between p-3 border rounded"
+                          className="flex items-center justify-between rounded border p-3"
                         >
                           <div>
                             <span className="font-medium">
                               {test.equipmentName}
                             </span>
-                            <span className="text-sm text-muted-foreground ml-2">
+                            <span className="text-muted-foreground ml-2 text-sm">
                               ({test.testType})
                             </span>
                           </div>

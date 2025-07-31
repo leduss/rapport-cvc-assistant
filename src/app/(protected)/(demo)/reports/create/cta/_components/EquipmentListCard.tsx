@@ -54,8 +54,8 @@ export const EquipmentListCard: React.FC<EquipmentListCardProps> = ({
       </CardHeader>
       <CardContent className="space-y-4">
         {equipments.map((equipment, index) => (
-          <div key={equipment.id} className="border rounded-lg p-4 space-y-3">
-            <div className="flex items-center justify-between mb-2">
+          <div key={equipment.id} className="space-y-3 rounded-lg border p-4">
+            <div className="mb-2 flex items-center justify-between">
               <h4 className="text-sm font-semibold">Équipement {index + 1}</h4>
               <Button
                 variant="ghost"
@@ -126,8 +126,8 @@ export const EquipmentListCard: React.FC<EquipmentListCardProps> = ({
         ))}
 
         {equipments.length === 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <ClipboardList className="mx-auto h-8 w-8 mb-2 opacity-50" />
+          <div className="text-muted-foreground py-8 text-center">
+            <ClipboardList className="mx-auto mb-2 h-8 w-8 opacity-50" />
             <p className="text-sm">Aucun équipement relevé</p>
             <p className="text-xs">
               Cliquez sur &quot;Ajouter&quot; pour commencer

@@ -153,10 +153,56 @@ export interface CTATest {
     | 'EN_ATTENTE';
   comments: string;
   recommendations: string;
+
+  airBalancingMeasurements: AirBalancingMeasurement[];
+  airBalancingScenarios: AirBalancingScenario[];
 }
 
 export interface Project {
   id: string;
   name: string;
   client: string;
+}
+
+export interface AirBalancingMeasurement {
+  id: string;
+  type: 'SOUFFLAGE' | 'REPRISE' | 'EXTRACTION';
+  designation: string; // Ex: "Bouche bureau 101"
+  dimensions: string; // Ex: "BS-101" (référence sur plan)
+  modele: string; // Ex: "ALDES BAP 300x150"
+
+  // Débits par scénario
+  scenarios: {
+    [scenarioId: string]: {
+      debitTheorique: number | 0; // Débit prévu au CCTP
+      debitMesure: number | 0; // Débit mesuré
+      ecart: number | 0; // Écart calculé en %
+      reglage: string; // Position registre/molette
+      pression: number | 0; // Pression à la bouche (Pa)
+      vitesse: number | 0; // Vitesse d'air (m/s)
+      conforme: boolean; // Si dans la tolérance
+    };
+  };
+
+  notes: string; // Observations particulières
+}
+
+export interface AirBalancingScenario {
+  id: string;
+  name: string; // Ex: "Petite vitesse", "Grande vitesse"
+  description: string; // Ex: "Mode occupation normale"
+  color: string; // Couleur pour l'UI
+  icon?: string; // Icône optionnelle
+  active: boolean; // Si le scénario est actif
+}
+
+export const MOUTH_TYPES = ['SOUFFLAGE', 'REPRISE', 'EXTRACTION'] as const;
+export type MouthType = (typeof MOUTH_TYPES)[number];
+
+export interface SummaryRow {
+  type: MouthType;
+  totalCount: number;
+  totalTheorique: number;
+  totalMesure: number;
+  errorPct: number;
 }

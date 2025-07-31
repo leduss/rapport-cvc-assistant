@@ -12,7 +12,7 @@ import { CTAConditionsForm } from './_components/CTAConditionsForm';
 import { CTAGeneralInfoForm } from './_components/CTAGeneralInfoForm';
 import { CTAHeader } from './_components/ctaHeader';
 import { CTAInfoForm } from './_components/CTAInfoForm';
-import { CTAReportPreview } from './_components/CTAReportPreview';
+import { CTAReportPreview } from './_components/ctaReportPreview/CTAReportPreview';
 import { CTATestCard } from './_components/CTATestCard';
 import { MissingCTAInfoCard, NoTestsCard } from './_components/EmptyStateCards';
 import { useCTAReport } from './_components/hooks/useCTAReports';
@@ -39,6 +39,14 @@ export default function CTAReportPage() {
     addAttachment,
     updateAttachmentDescription,
     deleteAttachment,
+    addAirBalancingMeasurement,
+    updateAirBalancingMeasurement,
+    deleteAirBalancingMeasurement,
+    addAirBalancingScenario,
+    updateAirBalancingScenario,
+    deleteAirBalancingScenario,
+    getAirBalancingSummary,
+    getAirBalancingStats,
   } = useCTAReport();
 
   const { printRef, handlePrint } = usePrintReport(formData.reportNumber);
@@ -50,11 +58,11 @@ export default function CTAReportPage() {
   );
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl">
+    <div className="mx-auto p-6">
       <CTAHeader onSave={handleSave} />
 
       <Tabs defaultValue="general" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 ">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger className="cursor-pointer" value="general">
             Informations générales
           </TabsTrigger>
@@ -90,7 +98,7 @@ export default function CTAReportPage() {
                   <h3 className="text-lg font-semibold">
                     Tests de la CTA : {formData.ctaName}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     {formData.brand} {formData.model} - {formData.location}
                   </p>
                 </div>
@@ -126,6 +134,18 @@ export default function CTAReportPage() {
                         updateAttachmentDescription
                       }
                       onDeleteAttachment={deleteAttachment}
+                      onAddAirBalancingMeasurement={addAirBalancingMeasurement}
+                      onUpdateAirBalancingMeasurement={
+                        updateAirBalancingMeasurement
+                      }
+                      onDeleteAirBalancingMeasurement={
+                        deleteAirBalancingMeasurement
+                      }
+                      onAddAirBalancingScenario={addAirBalancingScenario}
+                      onUpdateAirBalancingScenario={updateAirBalancingScenario}
+                      onDeleteAirBalancingScenario={deleteAirBalancingScenario}
+                      getAirBalancingSummary={getAirBalancingSummary}
+                      getAirBalancingStats={getAirBalancingStats}
                     />
                   ))
                 )}

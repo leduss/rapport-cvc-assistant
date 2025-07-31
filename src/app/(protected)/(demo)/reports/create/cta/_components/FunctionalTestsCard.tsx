@@ -100,7 +100,7 @@ export const FunctionalTestsCard: React.FC<FunctionalTestsCardProps> = ({
               value={tests[key]}
               onValueChange={(newValue: TestStatus) => onUpdate(key, newValue)}
             >
-              <SelectTrigger className="w-36 h-8">
+              <SelectTrigger className="h-8 w-36">
                 <SelectValue className={getStatusColor(tests[key])}>
                   <span className="flex items-center gap-2">
                     <span className="font-semibold">
@@ -125,7 +125,7 @@ export const FunctionalTestsCard: React.FC<FunctionalTestsCardProps> = ({
                       <span className={getStatusColor(value)}>{label}</span>
                     </div>
                     {description && (
-                      <p className="text-xs text-muted-foreground mt-1">
+                      <p className="text-muted-foreground mt-1 text-xs">
                         {description}
                       </p>
                     )}

@@ -2,7 +2,13 @@ import { useState } from 'react';
 
 import { Attachment, Equipment } from '@/types';
 
-import { CTAReportData, CTATest } from '../type/type';
+import {
+  AirBalancingMeasurement,
+  AirBalancingScenario,
+  CTAReportData,
+  CTATest,
+  SummaryRow,
+} from '../type/type';
 
 export const useCTAReport = () => {
   const [formData, setFormData] = useState<CTAReportData>({
@@ -258,6 +264,24 @@ export const useCTAReport = () => {
       overallStatus: 'EN_ATTENTE',
       comments: '',
       recommendations: '',
+
+      airBalancingMeasurements: [],
+      airBalancingScenarios: [
+        {
+          id: 'pv',
+          name: 'Petite vitesse',
+          description: 'Mode occupation normale',
+          color: 'bg-blue-500',
+          active: true,
+        },
+        {
+          id: 'gv',
+          name: 'Grande vitesse',
+          description: 'Mode surventilation',
+          color: 'bg-green-500',
+          active: true,
+        },
+      ],
     };
   };
 
@@ -292,6 +316,227 @@ export const useCTAReport = () => {
     URL.revokeObjectURL(url);
   };
 
+  const addAirBalancingMeasurement = (testId: string) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    const newMeasurement: AirBalancingMeasurement = {
+      id: `abm-${Date.now()}`,
+      type: 'SOUFFLAGE',
+      designation: '',
+      dimensions: '',
+      modele: '',
+      scenarios: {},
+      notes: '',
+    };
+
+    // Initialiser avec les scénarios existants
+    if (test.airBalancingScenarios) {
+      test.airBalancingScenarios.forEach((scenario) => {
+        newMeasurement.scenarios[scenario.id] = {
+          debitTheorique: 0,
+          debitMesure: 0,
+          ecart: 0,
+          reglage: '',
+          pression: 0,
+          vitesse: 0,
+          conforme: true,
+        };
+      });
+    }
+    updateCTATest(testId, {
+      airBalancingMeasurements: [
+        ...(test.airBalancingMeasurements || []),
+        newMeasurement,
+      ],
+    });
+  };
+
+  const updateAirBalancingMeasurement = (
+    testId: string,
+    measurementId: string,
+    updates: Partial<AirBalancingMeasurement>
+  ) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    const updatedMeasurements = test.airBalancingMeasurements.map((m) =>
+      m.id === measurementId ? { ...m, ...updates } : m
+    );
+
+    updateCTATest(testId, { airBalancingMeasurements: updatedMeasurements });
+  };
+
+  const deleteAirBalancingMeasurement = (
+    testId: string,
+    measurementId: string
+  ) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    const updatedMeasurements = test.airBalancingMeasurements.filter(
+      (m) => m.id !== measurementId
+    );
+
+    updateCTATest(testId, { airBalancingMeasurements: updatedMeasurements });
+  };
+
+  const addAirBalancingScenario = (testId: string) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    const colors = [
+      'bg-blue-500',
+      'bg-green-500',
+      'bg-purple-500',
+      'bg-orange-500',
+      'bg-pink-500',
+    ];
+    const scenarioCount = test.airBalancingScenarios?.length || 0;
+
+    const newScenario: AirBalancingScenario = {
+      id: `scenario-${Date.now()}`,
+      name: `Scénario ${scenarioCount + 1}`,
+      description: '',
+      color: colors[scenarioCount % colors.length],
+      active: scenarioCount === 0,
+    };
+
+    // Ajouter le scénario à toutes les mesures existantes
+    const updatedMeasurements = test.airBalancingMeasurements.map(
+      (measurement) => ({
+        ...measurement,
+        scenarios: {
+          ...measurement.scenarios,
+          [newScenario.id]: {
+            debitTheorique: 0,
+            debitMesure: 0,
+            ecart: 0,
+            reglage: '',
+            pression: 0,
+            vitesse: 0,
+            conforme: true,
+          },
+        },
+      })
+    );
+
+    updateCTATest(testId, {
+      airBalancingScenarios: [
+        ...(test.airBalancingScenarios || []),
+        newScenario,
+      ],
+      airBalancingMeasurements: updatedMeasurements,
+    });
+  };
+
+  const updateAirBalancingScenario = (
+    testId: string,
+    scenarioId: string,
+    updates: Partial<AirBalancingScenario>
+  ) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    const updatedScenarios = test.airBalancingScenarios.map((s) =>
+      s.id === scenarioId ? { ...s, ...updates } : s
+    );
+
+    updateCTATest(testId, { airBalancingScenarios: updatedScenarios });
+  };
+
+  const getAirBalancingStats = (
+    testId: string,
+    scenarioId: string,
+    typeFilter: 'ALL' | 'SOUFFLAGE' | 'REPRISE' | 'EXTRACTION' = 'ALL'
+  ) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test || !test.airBalancingMeasurements) {
+      return { total: 0, conformes: 0, nonConformes: 0 };
+    }
+
+    const filtered = test.airBalancingMeasurements.filter(
+      (m) =>
+        (typeFilter === 'ALL' || m.type === typeFilter) &&
+        m.scenarios[scenarioId]
+    );
+
+    const total = filtered.length;
+    const conformes = filtered.filter(
+      (m) => m.scenarios[scenarioId]?.conforme ?? true
+    ).length;
+    const nonConformes = total - conformes;
+
+    return { total, conformes, nonConformes };
+  };
+
+  const deleteAirBalancingScenario = (testId: string, scenarioId: string) => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test) return;
+
+    // Supprimer le scénario
+    const updatedScenarios = test.airBalancingScenarios.filter(
+      (s) => s.id !== scenarioId
+    );
+
+    // Supprimer les données du scénario dans toutes les mesures
+    const updatedMeasurements = test.airBalancingMeasurements.map(
+      (measurement) => {
+        const { [scenarioId]: deleted, ...remainingScenarios } =
+          measurement.scenarios;
+        return {
+          ...measurement,
+          scenarios: remainingScenarios,
+        };
+      }
+    );
+
+    updateCTATest(testId, {
+      airBalancingScenarios: updatedScenarios,
+      airBalancingMeasurements: updatedMeasurements,
+    });
+  };
+
+  const getAirBalancingSummary = (
+    testId: string,
+    scenarioId: string
+  ): SummaryRow[] => {
+    const test = ctaTests.find((t) => t.id === testId);
+    if (!test || !test.airBalancingMeasurements) return [];
+
+    const measurements = test.airBalancingMeasurements;
+
+    return ['SOUFFLAGE', 'REPRISE', 'EXTRACTION']
+      .map((t) => {
+        const type = t as SummaryRow['type'];
+        const filtered = measurements.filter((m) => m.type === type);
+        const totalCount = filtered.length;
+
+        const totalTheorique = filtered.reduce(
+          (sum, m) => sum + (m.scenarios[scenarioId]?.debitTheorique || 0),
+          0
+        );
+
+        const totalMesure = filtered.reduce(
+          (sum, m) => sum + (m.scenarios[scenarioId]?.debitMesure || 0),
+          0
+        );
+
+        const errorPct = totalTheorique
+          ? Math.round(((totalMesure - totalTheorique) / totalTheorique) * 100)
+          : 0;
+
+        return { type, totalCount, totalTheorique, totalMesure, errorPct };
+      })
+      .filter((r) => r.totalCount > 0);
+  };
+
+  // Mise à jour de createNewTest pour inclure les scénarios par défaut
+
+  // ... reste des propriétés ..
+
+  // Dans createNewTest, ajouter :
+
   return {
     formData,
     ctaTests,
@@ -310,5 +555,13 @@ export const useCTAReport = () => {
     updateAttachmentDescription,
     deleteAttachment,
     updateEquipmentList,
+    addAirBalancingMeasurement,
+    updateAirBalancingMeasurement,
+    deleteAirBalancingMeasurement,
+    addAirBalancingScenario,
+    updateAirBalancingScenario,
+    deleteAirBalancingScenario,
+    getAirBalancingSummary,
+    getAirBalancingStats,
   };
 };

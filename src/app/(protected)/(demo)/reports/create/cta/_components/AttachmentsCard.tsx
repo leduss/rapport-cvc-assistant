@@ -6,15 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Attachment } from '@/types';
 
-interface Attachment {
-  id: string;
-  type: 'PHOTO' | 'DOCUMENT';
-  name: string;
-  description: string;
-  url?: string;
-  file?: File;
-}
+
 
 interface AttachmentsCardProps {
   attachments: Attachment[];
@@ -91,12 +85,12 @@ export const AttachmentsCard: React.FC<AttachmentsCardProps> = ({
           {attachments.map((attachment) => (
             <div
               key={attachment.id}
-              className="flex items-center gap-3 p-3 border rounded-lg"
+              className="flex items-center gap-3 rounded-lg border p-3"
             >
               {attachment.type === 'PHOTO' ? (
-                <Camera className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                <Camera className="h-5 w-5 flex-shrink-0 text-blue-600" />
               ) : (
-                <FileText className="h-5 w-5 text-orange-600 flex-shrink-0" />
+                <FileText className="h-5 w-5 flex-shrink-0 text-orange-600" />
               )}
               <div className="flex-1 space-y-1">
                 <p className="text-sm font-medium">{attachment.name}</p>
@@ -121,8 +115,8 @@ export const AttachmentsCard: React.FC<AttachmentsCardProps> = ({
           ))}
 
           {attachments.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              <Upload className="mx-auto h-8 w-8 mb-2 opacity-50" />
+            <div className="text-muted-foreground py-8 text-center">
+              <Upload className="mx-auto mb-2 h-8 w-8 opacity-50" />
               <p className="text-sm">Aucun fichier ajouté</p>
               <p className="text-xs">Photos et documents techniques</p>
             </div>
